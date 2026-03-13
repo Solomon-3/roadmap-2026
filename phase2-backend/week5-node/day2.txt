@@ -1,0 +1,15 @@
+weve done server basics as you can see 
+then run your server ie  'node server.js'
+then after yo write 'http://localhost:3000' on your browser  then you will see the message 
+
+
+flow of what just happened
+browser -> sends request -> node server -> your code runs -> response sent back
+thus the browser sent an http request and your code answerd with "hello from my server"
+
+
+ctrl + C kills the node process and the server stops running
+
+
+internally the server is doing this 
+incoming request -> check url path -> run matching code -> send response 

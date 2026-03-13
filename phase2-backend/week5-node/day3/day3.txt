@@ -1,0 +1,61 @@
+UNDERSTANDING REQUESTS (URL , METHOD, HEADERS)
+
+observe the terminal for the various urls eg /about , /test
+
+1) url broken down 
+nb: its what node.js  receives in 'req.url'
+protocol -> http
+host-> localhost
+port -> 3000
+path -> /about
+
+2) method
+GET      -> fetch data
+POST     -> send data
+PUT      -> replace data
+PATCH    -> update data
+DELETE   -> remove data
+
+example
+GET /users
+DELETE /users/5
+
+Right now your browser sends GET because typing a url simply means give me this page
+
+3) Headers
+these are metadata about the request
+
+GET /about Http/1.1
+Host: localhost:3000
+Accept: text/html
+Connection: keep-alive
+
+translates to
+
+host  -> which server
+Accept -> whata response formats browser
+connection -> keep connection alive
+
+your browser sends
+REQUEST
+---------
+Method : GET
+Path: /about
+Headers:
+   Host: localhost:3000
+   Accept: text/html
+   Connection: keep-alive
+
+then your server receives
+req.method
+req.url
+req.headers
+
+
+flow
+request arrives -> check method -> check url -> run logic -> send response
+
+real systems depend heavily on POST
+login, signup, create post, upload file, send message
+
+
