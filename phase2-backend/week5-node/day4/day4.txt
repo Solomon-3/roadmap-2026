@@ -91,3 +91,29 @@ request url -> routing table -> correct handler function
 
 your server now has 3 layers
 http server -> routing layer -> handler functions
+
+
+
+
+
+DAY 7
+REST-style API
+
+Up to now our server returns plain text like : Users page, products page
+real backends use JSON and this is how they communicate with : web apps, mobile apps , other servers
+
+What youve just built 
+GET endpoint ie 'GET /users' which returns data in endpoint. this is the core of REST
+
+Now lets handle POST requests 
+eg 'POST /users' where the client sends {"name": David} and thenthe server adds the user
+
+NOTE: a handler can only be used when the URL is the only descision factor  ie URL -> routes table -> handler
+but APIs have 2 decision factors (METHOD + URL) eg : GET /users -> getUsers, POST /uses -> createUser ........................same URL but diff method that a routing table cant distingush
+there fore we have to switch the architecture like weve done in the second code 
+
+flow
+request -> check method -> check url -> correct handler
+
+test
+test with curl
