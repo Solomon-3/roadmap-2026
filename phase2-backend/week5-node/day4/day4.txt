@@ -60,5 +60,34 @@ without logs, debugging becomes impossible
 
 flow
 request -> console.log -> route logic -> response
+request -> logger(req) -> route logic -> response
+in express it lookslike this: 'app.use(logger)'
+
+middleware handles things like authentication, request validataion, logging, security headers, rate limiting
+
+flow
+request arrives -> logger(req) runs first -> route condition check -> /about route matched -> "about route accessed"prints -> responsesent to browser
 
 
+but real engineers log how long the server took to respond. this identifies slow APIs
+you can see this eg 13ms like what the server showed after modifying the code
+
+
+
+
+
+
+
+
+DAY 6
+weve used /,about,users etc eg if(req.url === "/about"){...}
+but imagine 40 routes, you cannot easily put them  and even if you do , it becomes garbage architecture
+
+Structure Routing (routing table)
+instead of if/else, we must routes to handlers
+
+concept
+request url -> routing table -> correct handler function
+
+your server now has 3 layers
+http server -> routing layer -> handler functions
