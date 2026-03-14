@@ -1,0 +1,26 @@
+API
+an API is simply a server exposing structured routes like: GET /users, POST /users
+
+flow 
+client request -> server -> routecheck -> /users,/products,other
+browser (GET /usess) -> node server(checks: req.url === "/usess", req.method === "GET") -> Route matched -> server sends JSON["alice","bob","solo"] 
+
+servers send JSON 
+json is the universal language for APIs
+'JSON.stringify(users)'
+
+now lets upgrade our server to also accept data ie POST
+curl -X POST http://localhost:3000/users -d "Spencer"
+
+a) so when yo run that command , the tool curl sent this http request:
+POST /users
+Body: Spencer
+
+b) your Node.js server then executed this flow:
+Client(curl) (POST /users, Body:Spencer) -> Node server (req.method ===POST, req.url ===/users) -> server starts reading body (req.on("data")) -> Body collected (req.on("end")) -> users.push("Spencer") -> response sent("User added")
+
+
+we have a weakness you are sending "spencer" as plain text yet real real APIs send it as structured JSON
+{
+   "name": "Spencer"
+}
