@@ -24,3 +24,41 @@ we have a weakness you are sending "spencer" as plain text yet real real APIs se
 {
    "name": "Spencer"
 }
+
+curl -X POST http://localhost:3000/users \
+-H "Content-Type: application/json" \
+-d '{"name":"xuusd"}'
+
+
+
+
+
+as of now what youve learned 
+GET requests, Post requests, request body, server memory, json apis, http headers, real data flow
+
+
+
+
+
+
+
+DAY 5
+up to now your server receives requests, checks routes, sends responses
+today we learn about middlewarethinking (request logging)
+
+middleware means:
+request comes in -> somethins runs BEFORE the route -> route logic runs -> response goes back
+eg : logging requests, authentication, request validation, rate limiting
+
+today we build request logging which is the simplest
+after running the server and opening local host then check your terminal
+
+flow
+Browser -> incoming request -> logging layer -> route logic -> response
+this will b so useful when you start express.js
+without logs, debugging becomes impossible
+
+flow
+request -> console.log -> route logic -> response
+
+
