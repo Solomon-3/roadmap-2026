@@ -1,0 +1,9 @@
+we are now organizing our code rather than everything being in server.js 
+
+so
+server.js, routes(users.js, products.js), middleware(auth.js)
+
+so as we can see we now have 6 items only ie these 3 and the nodemodules, package.json, package-lock.json    ...............totalling to 6 items
+
+flow
+server.js -> users router -> authMiddleware -> route handler -> JSON response
