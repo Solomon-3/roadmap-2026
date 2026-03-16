@@ -1,0 +1,43 @@
+1) 'npm init -y '
+this creates a package.json file ....todaya we are doing expressjs
+
+the package.json is the brain of every node project
+it stores: project name, dependencies, scipts, version, entry file
+
+eg, 
+{
+  "name": "week6-express",
+  "version": "1.0.0"
+}
+
+almost every backend project in node starts like this
+
+
+2) install express
+'npm install express'
+
+node_modules ->  contains all installed libraries including express.js 
+you never have to push it to github because it can always be created again with 'npm install'
+
+package.json -> control file of the project
+it contains: you already know 5 things
+
+package-lock.json -> it locks the exact versions of the installed packages so that the project runs the same on every machine
+
+
+#first file
+flow
+browser request -> express server -> route matching -> handler function -> response sent
+
+3) now we introduce middleware
+one of the modt important concepts in backend development
+its a funtion that runs before the route handler
+example uses in in real systems: logging requests, authentication, security checks, request validation
+
+
+# second file
+added middleware 
+added a copy of authenication, where the verified users are allowed
+reason alos interms of scope thats why we put 'app.get("/users"authMiddleware,handler)'
+so the rest of the routes will be a) [public] and the routes with middleware will be b) [protected]
+
