@@ -33,3 +33,11 @@ req.body.name
 GET /users:id
 
 
+
+
+DAY 4
+one of the problems we have so far is that in the event that user 2 is deleted , the IDs of the rest dont change eg 1,3,4 if one is to add another person then lem(users)+1 => 1,3,4,4
+as you can see we now have two users with id 4 yet ids must be unique,
+APIs depend on ids for updates, deletes, linking data
+
+
