@@ -68,18 +68,7 @@ router.post("/", (req, res)=>{
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
+/*
 //DAY 4 FULL CRUD API
 
 
@@ -161,3 +150,101 @@ router.delete("/:id", (req, res)=>{
 
 
 module.exports = router;
+
+*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+// DAY 5 persistence
+
+
+const express = require("express");
+const router = express.Router();
+
+const fs = require("fs");
+const authMiddleware = require("../middleware/auth");
+
+let users = JSON.parse(fs.readFileSync("users.json"));
+
+let nextId = 4;
+
+router.get("/", authMiddleware, (req, res)=>{
+       res.json(users);
+});
+
+router.get("/:id", (req, res)=> {
+       const userId = parseInt(req.params.id);
+       const user =  users.find(u => u.id === userId);
+
+       if (!user){
+             return res.status(404).send("User not found");
+       }
+
+       res.json(user);
+});
+
+router.post("/", (req, res)=>{
+      const newUser= {
+//           id: users.length +1,
+             id: nextId++,
+             name: req.body.name
+      };
+
+      users.push(newUser);
+      fs.writeFileSync("users.json", JSON.stringify(users, null, 2));
+
+      res.json({
+          message: "User added",
+          user: newUser
+      });
+});
+
+
+router.put("/:id",(req, res)=>{
+      const userId = parseInt(req.params.id);
+      const user = users.find(u=>u.id===userId);
+
+      if (!user){
+          return res.status(404).send("User not found");
+      }
+
+      user.name = req.body.name;
+      fs.writeFileSync("users.json", JSON.stringify(users, null, 2));
+
+      res.json({
+          message: "User updated",
+          user: user
+      });
+});
+
+
+router.delete("/:id", (req, res)=>{
+       const userId = parseInt(req.params.id);
+       const index = users.findIndex(u=>u.id===userId);
+
+       if (index === -1){
+             return res.status(404).send("User not found");
+       }
+
+       users.splice(index,1);
+       fs.writeFileSync("users.json", JSON.stringify(users, null, 2));
+
+       res.json({
+            message: "User deleted"
+       });
+
+});
+
+
+module.exports = router;
+
