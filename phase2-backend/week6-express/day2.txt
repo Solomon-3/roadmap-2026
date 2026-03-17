@@ -40,4 +40,38 @@ one of the problems we have so far is that in the event that user 2 is deleted ,
 as you can see we now have two users with id 4 yet ids must be unique,
 APIs depend on ids for updates, deletes, linking data
 
+'''
+let nextId = 4;
+id: nextId++
+'''
+temporarily
 
+anyways today we are doing full CRUD API
+We will add PUT, DELETE
+
+curl -X PUT http://localhost:3000/users/1 -H "Content-Type: application/json" -d '{"name":"UpdatedName"}'
+curl -X DELETE http://localhost:3000/users/2
+curl -X POST http://localhost:3000/users -H "Content-Type: application/json" -d '{"name":"Spencer"}'
+
+
+but mind you, once restart server -> everything disappears
+all the changes that i effect using PUT or POST or DELETE all dissapear once i close the server and when i run it again it only shows the effects i hardcoded in the array in user.js
+
+what we lack is persistence, our data must survive process death
+
+
+
+
+DAY 5
+OUR PERSISTENCE PROBLEM
+
+1) create a storage file 'nano users.json'
+
+2) in users.js
+const fs = require("fs");
+let users = JSON.parse(fs.readFileSync("users.json"));
+ after add that line at the end eg
+      users.push(newUser);
+      fs.writeFileSync("users.json", JSON.stringify(users, null, 2));
+
+tomorrow we will be handlng validation eg people who send name as  "" 
