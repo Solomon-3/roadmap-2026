@@ -75,3 +75,30 @@ let users = JSON.parse(fs.readFileSync("users.json"));
       fs.writeFileSync("users.json", JSON.stringify(users, null, 2));
 
 tomorrow we will be handlng validation eg people who send name as  "" 
+
+
+
+DAY 6
+validating our data before storing it + better structure
+
+1) add validation
+
+curl -X POST http://localhost:3000/users -H "Content-Type: application/json" -d '{"name":""}' 
+
+in plain text
+we now have routing -> validation -> data logic -> file writing
+
+so weve done this to both POST and PUT
+
+2) Controller layer
+so after we add collers we realise some significant change in the user.js file in routes
+
+routes -> define endpoints
+controllers -> contain logic
+
+structure
+server.js
+routes/ -> user.js
+controllers/ -> userController.js
+middleware/ -> auth.js
+users.json
