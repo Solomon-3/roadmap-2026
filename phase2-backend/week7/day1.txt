@@ -1,0 +1,51 @@
+Today we are learning and starting on the best database ie POSTGRES
+
+
+sudo apt update
+sudo apt install postgresql postgresql-contrib -y
+sudo systemctl status postgresgl
+
+spencer@spencer:~$ sudo -i -u postgres
+psql 
+postgres=#
+
+postgres=# CREATE DATABASE wee7db;
+
+CREATE DATABASE
+postgres=# \c wee7db 
+You are now connected to database "wee7db" as user "postgres".
+
+wee7db=# CREATE USER spencer WITH PASSWORD '1234';
+
+CREATE ROLE
+wee7db=# ALTER ROLE spencer SET client_encoding TO 'utf8';
+ALTER ROLE
+wee7db=# ALTER ROLE spencer SET default_transaction_isolation TO 'read committed';
+ALTER ROLE
+wee7db=# ALTER ROLE spencer SET timezone TO 'UTC';
+wee7db=# GRANT ALL PRIVILEGES ON DATABASE wee7db TO spencer;
+
+GRANT
+wee7db=# \c wee7db 
+You are now connected to database "wee7db" as user "postgres".
+
+wee7db=# CREATE TABLE users (id SERIAL PRIMARY KEY, name VARCHAR(100) NOT NULL);CREATE TABLE
+wee7db=# INSERT INTO users (name) VALUES ('Alice');
+INSERT 0 1
+wee7db=# INSERT INTO users (name) VALUES ('Bob');
+INSERT 0 1
+wee7db=# SELECT * FROM users;
+ id | name  
+----+-------
+  1 | Alice
+  2 | Bob
+(2 rows)
+
+############################################
+
+so weve shifted from users.json to real relational databases that handle 
+-IDs(autoincreament), (data storage), data integrity
+
+
+it replaces you fs.readFileSync
+                fs.writeFileSync

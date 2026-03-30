@@ -1,0 +1,145 @@
+we are now organizing our code rather than everything being in server.js 
+
+so
+server.js, routes(users.js, products.js), middleware(auth.js)
+
+so as we can see we now have 6 items only ie these 3 and the nodemodules, package.json, package-lock.json    ...............totalling to 6 items(controllers and services are missing)
+
+flow
+server.js -> users router -> authMiddleware -> route handler -> JSON response
+
+now try adding products 
+
+
+
+DAY 3
+REQUEST ie POST
+The API must 1) parse the request body, 2) store the data in memory
+
+1) enable json parsing
+'app.use(express.json());'
+without it -> 'req.body = undefined'
+withit -> 'req.body = parsed JSON object'
+
+2)add post route for users
+mind you the value added is always in 'req.body'
+
+know the diff between 
+req.query.key
+req.params.id
+req.body.name
+
+3) GET /users/2
+GET /users:id
+
+
+
+
+DAY 4
+one of the problems we have so far is that in the event that user 2 is deleted , the IDs of the rest dont change eg 1,3,4 if one is to add another person then lem(users)+1 => 1,3,4,4
+as you can see we now have two users with id 4 yet ids must be unique,
+APIs depend on ids for updates, deletes, linking data
+
+'''
+let nextId = 4;
+id: nextId++
+'''
+temporarily
+
+anyways today we are doing full CRUD API
+We will add PUT, DELETE
+
+curl -X PUT http://localhost:3000/users/1 -H "Content-Type: application/json" -d '{"name":"UpdatedName"}'
+curl -X DELETE http://localhost:3000/users/2
+curl -X POST http://localhost:3000/users -H "Content-Type: application/json" -d '{"name":"Spencer"}'
+
+
+but mind you, once restart server -> everything disappears
+all the changes that i effect using PUT or POST or DELETE all dissapear once i close the server and when i run it again it only shows the effects i hardcoded in the array in user.js
+
+what we lack is persistence, our data must survive process death
+
+
+
+
+DAY 5
+OUR PERSISTENCE PROBLEM
+
+1) create a storage file 'nano users.json'
+
+2) in users.js
+const fs = require("fs");
+let users = JSON.parse(fs.readFileSync("users.json"));
+ after add that line at the end eg
+      users.push(newUser);
+      fs.writeFileSync("users.json", JSON.stringify(users, null, 2));
+
+tomorrow we will be handlng validation eg people who send name as  "" 
+
+
+
+DAY 6
+validating our data before storing it + better structure
+
+1) add validation
+
+curl -X POST http://localhost:3000/users -H "Content-Type: application/json" -d '{"name":""}' 
+
+in plain text
+we now have routing -> validation -> data logic -> file writing
+
+so weve done this to both POST and PUT
+
+2) Controller layer
+so after we add collers we realise some significant change in the user.js file in routes
+
+routes -> define endpoints
+controllers -> contain logic
+
+structure
+server.js
+routes/ -> user.js
+controllers/ -> userController.js
+middleware/ -> auth.js
+users.json
+
+
+DAY7 
+- Error handling is inconsistent
+- Responses are messy (strings + JSON mixed)
+- No standard API format
+- Middleware not used professionally
+
+
+insted os #user not found 
+=its now #success false
+=        #user not found
+
+our target is 
+consistency, predictability and debugging
+
+right now our API in incossistent ..sometimes string , sometimes JSON , sometimes nothing structured
+
+1) standard response
+from now on every response must follow    
+
+#success
+'''
+{
+  "success": true,
+  "data": ...
+}
+'''
+
+#Error
+'''
+{
+  "success": false,
+  "message": "Error message"
+}
+'''
+
+
+2) fix controller responses
+get,update,getone etc 
+curl -X POST http://localhost:3000/users -H "Content-Type: application/json" -d '{"name":"spencer"}'
