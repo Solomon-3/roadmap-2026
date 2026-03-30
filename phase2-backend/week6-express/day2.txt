@@ -102,3 +102,42 @@ routes/ -> user.js
 controllers/ -> userController.js
 middleware/ -> auth.js
 users.json
+
+
+DAY7 
+- Error handling is inconsistent
+- Responses are messy (strings + JSON mixed)
+- No standard API format
+- Middleware not used professionally
+
+
+insted os #user not found 
+=its now #success false
+=        #user not found
+
+our target is 
+consistency, predictability and debugging
+
+right now our API in incossistent ..sometimes string , sometimes JSON , sometimes nothing structured
+
+1) standard response
+from now on every response must follow    
+
+#success
+'''
+{
+  "success": true,
+  "data": ...
+}
+'''
+
+#Error
+'''
+{
+  "success": false,
+  "message": "Error message"
+}
+'''
+
+
+2) fix controller responses
