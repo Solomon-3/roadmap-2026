@@ -49,3 +49,25 @@ so weve shifted from users.json to real relational databases that handle
 
 it replaces you fs.readFileSync
                 fs.writeFileSync
+
+but a real system we dont need manual entries, it should be [Node.js <=> PostgreSQL]
+so we replace fs.readFileSync with database queries
+
+
+
+back to our week 6
+'npm install pg'
+'nano db.js'
+'nano test-db.js'
+'node test-db.js'
+
+after check the databases ie
+'\l'
+'\c week7db'
+'\dt'
+
+
+note:
+spencer@spencer -> normal user
+postgres@spencer -> switched user
+psql -> database shell
