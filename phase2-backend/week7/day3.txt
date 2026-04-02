@@ -1,0 +1,6 @@
+week 7 day 3
+
+we are separating the database logic or SQL logic from controllers 
+
+controllers -> handle http
+services -> handle business and db logic
