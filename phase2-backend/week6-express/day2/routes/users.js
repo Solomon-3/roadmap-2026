@@ -349,7 +349,7 @@ module.exports = router;
 */
 
 
-
+/*
 // still when we look at day six , the better structure comes in now where we introduce the concept of controllers
 
 const express = require("express");
@@ -365,6 +365,32 @@ const {
     deleteUser
 } = require("../controllers/usersController");
 
+router.get("/", authMiddleware, getUsers);
+router.get("/:id", getUserById);
+
+router.post("/", createUser);
+router.put("/:id", updateUser);
+router.delete("/:id", deleteUser);
+
+module.exports = router;
+*/
+
+// week 7 day5
+
+const express = require("express");
+const router = express.Router();
+
+const authMiddleware = require("../middleware/authMiddleware");
+
+const {
+    getUsers,
+    getUserById,
+    createUser,
+    updateUser,
+    deleteUser
+} = require("../controllers/usersController");
+
+//Protected routes
 router.get("/", authMiddleware, getUsers);
 router.get("/:id", getUserById);
 

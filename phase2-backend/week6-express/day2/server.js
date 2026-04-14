@@ -43,20 +43,25 @@ require("dotenv").config();
 const express = require("express");
 const userRoutes = require("./routes/users");
 const productRoutes = require("./routes/products");
+const authRoutes = require("./routes/auth");
 const errorHandler = require("./middleware/errorHandler");
 
 const app = express();
 
+//middleware
 app.use(express.json());
 
+//routes
+app.use("/auth",authRoutes);
 app.use("/users", userRoutes);
 app.use("/products", productRoutes);
 
+// health check
 app.get("/", (req, res) => {
-    res.json{(
+    res.json({
         success: true,
-        message: "Home Page"
-    )};
+        message: "API IS RUNNING"
+    });
 });
 
 //404 handler (very important)
