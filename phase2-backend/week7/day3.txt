@@ -28,3 +28,49 @@ edit server.js
 important order
 routes -> 404 -> errorHandler
 
+3) flow 
+req -> controller -> error happens -> next(err) -> global error middlware - response
+
+4) archived 
+secure config .env
+cleaner code (no hardcoded secrets)
+centralised error handling 
+production style backend structure
+
+
+
+day5 JWT AUTHENTICATIONS
+1) anyone can hit your API
+Install JWT 'npm install jsonwebtoken bcrypt'
+jsonwebcrypt -> create tokens
+bcrypt -> hash passwords
+
+2) update db
+sudo -i -u postgres 
+psql
+\c week7db
+then add 
+ALTER TABLE users ADD COLUMN password VARCHAR(255);
+
+3) create authController.js
+4) in routes add auth.js
+5) edit server.js
+6) im middleware add authMiddleware.js
+7) protect routes in routes/users.js
+
+8) tests
+register => curl -X POST http://localhost:3000/auth/register -H "Content-Type: application/json" -d '{"name": "salcatore", "password": "1234"}'
+login => curl -X POST http://localhost:3000/auth/login -H "Content-Type: application/json" -d '{"name":"salvatore","password":"1234"}'
+Access protected route => curl http://localhost:3000/users -H "Authorization: Bearer YOUR_TOKEN"
+
+9)what you built
+user registration
+password hashing
+login systems
+JWT generation
+protected routes
+
+10) flow
+client -> sends token in header
+server -> verifies token
+middleware -> allows access
