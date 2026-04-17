@@ -1,0 +1,26 @@
+week7 day 6
+AUTHORIZATION // ROLES + PERMISSIONS
+
+1) what to learn
+admin-only routes, user-specific access, ownership checks, real security patterns
+
+right now we have auth(you know who the user is) but we dont have authZ(you dont control what users can do)
+
+2) add role to database
+ALTER TABLE users ADD COLUMN role VARCHAR(20) DEFAULT 'user';
+now each user has id, name, pasword, role(user/admin)  
+
+3) make first admin
+UPDATE users SET role = 'admin' WHERE id = 1;
+
+4) include role in JWT under controllers/authcontroller.js
+5) crete role middleware in middleware/roleMiddleware.js
+6) protect admin routes in routes/users.js
+
+7) tests
+a)login as normal user
+curl -X POST http://localhost:3000/auth/login -H "Content-Type: application/json" -d '{"name":"salvatore","password":"1234"}'
+b) delete
+curl -X DELETE http://localhost:3000/users/1 -H "Authorization: Bearer token"
+
+for the case of seeing forbidden when you try to delete, try creating a normal user ie register John, then log in john, then try delete 
