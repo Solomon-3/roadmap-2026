@@ -376,7 +376,7 @@ module.exports = router;
 */
 
 // week 7 day5
-
+/*
 const express = require("express");
 const router = express.Router();
 
@@ -397,5 +397,36 @@ router.get("/:id", getUserById);
 router.post("/", createUser);
 router.put("/:id", updateUser);
 router.delete("/:id", deleteUser);
+
+module.exports = router;
+*/
+
+// week 7 day 6
+
+const express = require("express");
+const router = express.Router();
+
+const authMiddleware = require("../middleware/authMiddleware");
+const requireRole = require("../middleware/roleMiddleware");
+
+const {
+    getUsers,
+    getUserById,
+    createUser,
+    updateUser,
+    deleteUser
+} = require("../controllers/usersController");
+
+//Protected routes
+router.get("/", authMiddleware, getUsers);
+router.get("/:id", getUserById);
+
+router.post("/", createUser);
+router.put("/:id", updateUser);
+router.delete("/:id", deleteUser);
+
+//week7 day6 admin can delete
+router.delete("/:id", authMiddleware, requireRole("admin"), deleteUser);
+
 
 module.exports = router;
