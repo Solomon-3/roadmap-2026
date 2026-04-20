@@ -24,3 +24,11 @@ b) delete
 curl -X DELETE http://localhost:3000/users/1 -H "Authorization: Bearer token"
 
 for the case of seeing forbidden when you try to delete, try creating a normal user ie register John, then log in john, then try delete 
+
+
+8) ownership control
+any logged in user can see all users and thats bad design
+in real systems user-> can only see their own data
+                admin -> can access everything
+
+so we are going to add an ownership control in userController.js under getById
