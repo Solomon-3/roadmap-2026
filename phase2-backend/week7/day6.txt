@@ -32,3 +32,53 @@ in real systems user-> can only see their own data
                 admin -> can access everything
 
 so we are going to add an ownership control in userController.js under getById
+
+
+week 7 day 7
+relationships(user<=>products)
+foreign keys, JOIN querries, user owns products ....
+
+pencer@spencer:~/personal/roadmap-2026/phase2-backend/week6-express/day2$ sudo -i -u postgres
+[sudo] password for spencer: 
+postgres@spencer:~$ psql
+psql (16.13 (Ubuntu 16.13-0ubuntu0.24.04.1))
+Type "help" for help.
+
+postgres=# \c week7db
+You are now connected to database "week7db" as user "postgres".
+week7db=# ALTER TABLE products ADD COLOMN user_id INTEGER;
+ERROR:  syntax error at or near "INTEGER"
+LINE 1: ALTER TABLE products ADD COLOMN user_id INTEGER;
+                                                ^
+week7db=# \dt
+week7db=# \d products
+Did not find any relation named "products".
+week7db=# CREATE TABLE products (id SERIAL PRIMARY KEY, name VARCHAR(100));
+CREATE TABLE
+week7db=# ALTER TABLE products ADD COLUMN user_id INTEGER;
+ALTER TABLE
+
+at this stage the relationship layer is ready
+now lets make it real
+we need to enforce that products must belong to a valid user
+
+1) add foreign key
+week7db=# ALTER TABLE products ADD CONSTRAINT fk_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE;
+ALTER TABLE
+so this prevents invalid user_id, enforces data integrity, links products-> users at DB level
+
+2) test is try adding a bad product
+week7db=# INSERT INTO products (name, user_id) VALUES ('FakeProduct', 9999);
+ERROR:  insert or update on table "products" violates foreign key constraint "fk_user"
+DETAIL:  Key (user_id)=(9999) is not present in table "users".
+
+3) update backend logic 
+lets make our API use this relationship
+RULE(critical)
+Product owner = req.user.id 
+NOT
+user sends user_id
+
+4) update createProduct controller
+
+5) testflow
