@@ -261,6 +261,23 @@ async function getUserById(req, res) {
               });
          }
 
+// week 7 day6 ownwershipcheck
+         if (req.user.role != "admin" && req.user.id !== userId){
+              return res.status(403).json({
+                  success: false,
+                  message: "Not your data"
+              });
+         }
+
+         const user = await userService.getUserById(userId);
+
+         if (!user){
+             return res.status(404).json({
+                  success: false,
+                  message: "User not found"
+             });
+         }
+
          res.json({
              success: true,
              data: result.rows[0]
