@@ -1,0 +1,125 @@
+NB: ON DELETE CASCADE is dangerous because deleting a parent record (like a user can) autumatically delete all related records (like products , orders, transactions) which can lead to unintended data loss, loss of audit history , and sysytem incosistency if triggered accidedntally or without proper safeguards
+
+DAY1 JOINs
+this is where sql becomes real
+
+we have users and products(user_id) in our db
+relationship => user -> owns -> products
+
+1) INNER JOIN vs LEFT JOIN
+Inner join strict
+SELECT users.name, products.name
+FROM users
+INNER JOIN products
+ON users.id = products.user_id;   this returns # ONLY users who HAVE products
+
+Left join inclusive
+SELECT users.name, products.name
+FROM users
+LEFT JOIN products
+ON users.id = products.user_id;  this returns all users even if they dont have products
+
+SO RUN
+week7db=# SELECT users.id, users.name, products.name AS product FROM users INNER JOIN products ON users.id = products.user_id;
+week7db=# SELECT users.id, users.name, products.name AS product FROM users LEFT JOIN products ON users.id = products.user_id;
+
+
+#############################
+postgres=# \c week7db
+You are now connected to database "week7db" as user "postgres".
+week7db=# SELECT users.id, users.name, products.name AS product FROM users INNER JOIN products ON users.id = products.user_id;
+ id | name | product 
+----+------+---------
+(0 rows)
+
+week7db=# SELECT users.id, users.name, products.name AS product FROM users LEFT JOIN products ON users.id = products.user_id;
+ id |   name    | product 
+----+-----------+---------
+ 39 | john      | 
+  5 | salvatore | 
+ 38 | john      | 
+  4 | Neo       | 
+  3 | Spencer   | 
+(5 rows)
+
+week7db=# \dt products
+          List of relations
+ Schema |   Name   | Type  |  Owner   
+--------+----------+-------+----------
+ public | products | table | postgres
+(1 row)
+
+week7db=# \d products
+                                    Table "public.products"
+ Column  |          Type          | Collation | Nullable |               Default                
+---------+------------------------+-----------+----------+--------------------------------------
+ id      | integer                |           | not null | nextval('products_id_seq'::regclass)
+ name    | character varying(100) |           |          | 
+ user_id | integer                |           |          | 
+Indexes:
+    "products_pkey" PRIMARY KEY, btree (id)
+Foreign-key constraints:
+    "fk_user" FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+
+week7db=# INSERT INTO products (name, user_id) VALUES ('Laptop', 5);
+INSERT 0 1
+week7db=# INSERT INTO products (name, user_id) VALUES ('watch', 5);
+INSERT 0 1
+week7db=# INSERT INTO products (name, user_id) VALUES ('phone', 4);
+INSERT 0 1
+week7db=# SELECT users.id, users.name, products.name AS product FROM users INNER JOIN products ON users.id = products.user_id;
+ id |   name    | product 
+----+-----------+---------
+  5 | salvatore | Laptop
+  5 | salvatore | watch
+  4 | Neo       | phone
+(3 rows)
+
+week7db=# SELECT users.id, users.name, products.name AS product FROM users LEFT JOIN products ON users.id = products.user_id;
+ id |   name    | product 
+----+-----------+---------
+  5 | salvatore | Laptop
+  5 | salvatore | watch
+  4 | Neo       | phone
+ 39 | john      | 
+ 38 | john      | 
+  3 | Spencer   | 
+(6 rows)
+###########################################
+
+
+2) COUNT products per user
+##########################################                                                             ^
+week7db=# SELECT users.name, COUNT(products.id) AS total_products FROM users LEFT JOIN products ON users.id = products.user_id GROUP BY users.name ORDER BY total_products DESC;
+   name    | total_products 
+-----------+----------------
+ salvatore |              2
+ Neo       |              1
+ Spencer   |              0
+ john      |              0
+(4 rows)
+#######################################
+NOTE: if you had used COUNT(*) would result into SPENCER | 1 and this is because COUNT(*) counts rows, not values
+
+3) FILTERING
+lets move from show everything to only show what i care about
+#####################################
+week7db=# SELECT users.name, COUNT(products.id) AS total_products FROM users LEFT JOIN products ON users.id = products.user_id GROUP BY users.name HAVING COUNT(products.id) > 0;
+   name    | total_products 
+-----------+----------------
+ salvatore |              2
+ Neo       |              1
+(2 rows)
+###################################
+
+the key difference is that WHERE -> filter rows                    => filters before grouping 
+                           HAVING -> filter aggregated results     => filters after grouping
+
+EXECUTION ORDER
+A) FROM / JOIN
+B) WHERE        <- filters raw rows
+C) GROUP BY     <- creates groups
+D) HAVING       <- filters groups
+E) SELECT        
+
+lastly when they tell you find users with more than 1 product ....just change the part that says >0 to >1,     :)
