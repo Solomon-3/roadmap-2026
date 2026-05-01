@@ -123,3 +123,51 @@ D) HAVING       <- filters groups
 E) SELECT        
 
 lastly when they tell you find users with more than 1 product ....just change the part that says >0 to >1,     :)
+
+
+
+WEEK 8 DAY 2 - INDEXES (Performance)
+in the event tht we have 10 mil users, we would have a degredation where results move from milliseconds to seconds or even worse
+
+1) so right now our query SELECT FROM JOIN ON behind the scenes (no index)
+    for EACH user
+         scan ALL products
+so for 10 mil users and 10 mil products
+thats 10,000,000 * 10,000,000 = ehhh
+
+2) what an INDEX does
+no index -> search a book word by word
+index    -> jumping straight to the page
+
+week7db=# CREATE INDEX idx_products_user_id ON products(user_id);
+CREATE INDEX
+
+now instead of scan entire products table, jump directly to matching user_id
+JOIN performance depends heavily on indexed columns
+in my case products.user_id <- MUST Be indexed
+##############################
+week7db=# EXPLAIN ANALYZE SELECT users.name, products.name FROM users JOIN products ON users.id = products.user_id;
+                                                   QUERY PLAN                                                   
+----------------------------------------------------------------------------------------------------------------
+ Hash Join  (cost=1.07..12.34 rows=3 width=436) (actual time=0.056..0.063 rows=3 loops=1)
+   Hash Cond: (users.id = products.user_id)
+   ->  Seq Scan on users  (cost=0.00..10.90 rows=90 width=222) (actual time=0.018..0.021 rows=5 loops=1)
+   ->  Hash  (cost=1.03..1.03 rows=3 width=222) (actual time=0.019..0.020 rows=3 loops=1)
+         Buckets: 1024  Batches: 1  Memory Usage: 9kB
+         ->  Seq Scan on products  (cost=0.00..1.03 rows=3 width=222) (actual time=0.007..0.010 rows=3 loops=1)
+ Planning Time: 0.771 ms
+ Execution Time: 0.117 ms
+(8 rows)
+##################################
+before index: seq scan (slow) 
+after index: seq scan (fast)
+
+tradeoff
+reads => faster
+writes => slower
+because every insert must update index
+also storage cost increases, diminishing returns(not all columns are useful for indexing ..imagine indexing a gender column), query planner confusion(too many indexes can actually confuse POSTGRESql's OPTIMIZER)
+
+RULE: Index columns are used in JOIN, WHERE, ORDER BY
+
+
